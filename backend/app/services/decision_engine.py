@@ -1,8 +1,40 @@
-from app.services.state import traffic_state, signal_state, emergency_state
+from app.services.state import traffic_state, signal_state, emergency_state, dual_signal_state
 
-MIN_GREEN = 10
-MAX_GREEN = 60
+MIN_TIME = 10
+MAX_TIME = 60
 
+def decide_dual_signal(data):
+    A = data.road_A
+    B = data.road_B
+    pedestrian = data.pedestrian
+
+    # 🚶 Pedestrian priority
+    if pedestrian:
+        dual_signal_state.update({
+            "road_A": "RED",
+            "road_B": "RED",
+            "pedestrian": "GREEN",
+            "timer": 15
+        })
+        return dual_signal_state
+
+    # 🚗 Compare densities
+    if A > B:
+        timer = min(MAX_TIME, max(MIN_TIME, A * 2))
+        dual_signal_state.update({
+            "road_A": "GREEN",
+            "road_B": "RED",
+            "timer": timer
+        })
+    else:
+        timer = min(MAX_TIME, max(MIN_TIME, B * 2))
+        dual_signal_state.update({
+            "road_A": "RED",
+            "road_B": "GREEN",
+            "timer": timer
+        })
+
+    return dual_signal_state
 
 def decide_signal(intersection_id):
     traffic = traffic_state.get(intersection_id)

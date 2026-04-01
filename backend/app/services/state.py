@@ -7,3 +7,9 @@ emergency_state = {
     "route": [],
     "current_index": 0
 }
+
+dual_signal_state = {
+    "road_A": "RED",
+    "road_B": "RED",
+    "timer": 10
+}
