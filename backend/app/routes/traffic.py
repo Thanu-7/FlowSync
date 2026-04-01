@@ -1,18 +1,13 @@
 from fastapi import APIRouter
-from app.models.traffic_model import TrafficData
-from app.services.state import traffic_state
-from app.services.decision_engine import decide_signal
-from app.models.traffic_model import DualTrafficData
-from app.services.decision_engine import decide_dual_signal
-from app.services.state import dual_signal_state
+from app.models.traffic_model import TrafficData, DualTrafficData
+from app.services.state import traffic_state, dual_signal_state
+from app.services.decision_engine import decide_signal, decide_dual_signal
 
 router = APIRouter()
 
 @router.post("/dual")
-def dual_traffic(data: DualTrafficData):
-    result = decide_dual_signal(data)
-    return result
-
+def update_dual(data: DualTrafficData):
+    return decide_dual_signal(data)
 
 @router.get("/dual")
 def get_dual_signal():
@@ -20,15 +15,14 @@ def get_dual_signal():
 
 @router.post("/")
 def update_traffic(data: TrafficData):
+    # Update current traffic state for the intersection
     traffic_state[data.intersection_id] = data
 
-    # 🔥 CALL DECISION ENGINE
-    decide_signal(data.intersection_id)
-    
-    print("Traffic State:", traffic_state)
-    print("Calling decision engine for:", data.intersection_id)
+    # Trigger decision engine to calculate signal state based on new traffic data
+    decision = decide_signal(data.intersection_id)
 
-    return {"message": "Traffic processed and signal updated"}
-
-
-
+    return {
+        "message": "Traffic processed and signal updated",
+        "intersection_id": data.intersection_id,
+        "signal": decision
+    }

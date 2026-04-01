@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict,Optional
 
 class TrafficData(BaseModel):
     intersection_id: str
@@ -9,4 +9,5 @@ class TrafficData(BaseModel):
 class DualTrafficData(BaseModel):
     road_A: int
     road_B: int
-    pedestrian: bool = False
+    pedestrian: bool
+    emergency: Optional[str] = None  # "A" or "B"
