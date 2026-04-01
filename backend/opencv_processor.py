@@ -95,7 +95,7 @@ while True:
     # 🖥 Combine both videos
     combined = cv2.hconcat([frameA, frameB])
 
-    cv2.imshow("🚦 Smart Traffic System", combined)
+    cv2.imshow("Smart Traffic System", combined)
 
     # ⏳ small delay
     time.sleep(1)

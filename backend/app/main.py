@@ -1,12 +1,20 @@
 from fastapi import FastAPI
-from app.routes import traffic, gps, signals
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes import traffic
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all (for dev)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(traffic.router, prefix="/traffic")
-app.include_router(gps.router, prefix="/gps")
-app.include_router(signals.router, prefix="/signals")
+
 
 @app.get("/")
 def root():
-    return {"message": "Traffic System Running"}
+    return {"message": "Smart Traffic System Running 🚦"}
