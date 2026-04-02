@@ -20,15 +20,16 @@ def get_dual_signal():
     return dual_signal_state
 
 
-# 🚑 Emergency trigger
+# Emergency trigger
 @router.post("/emergency")
 def trigger_emergency(data: dict):
+    print("🚑 Emergency Triggered:", data)   
     emergency_state["active"] = True
     emergency_state["road"] = data.get("road")
     return {"message": "Emergency activated"}
 
 
-# ❌ Clear emergency
+# Clear emergency
 @router.post("/clear")
 def clear_emergency():
     emergency_state["active"] = False

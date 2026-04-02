@@ -11,28 +11,17 @@ def decide_dual_signal(data):
 
     # 🚑 1. Emergency override (highest priority)
     if emergency_state["active"]:
-        road = emergency_state["road"]
-
-        if road == "A":
-            dual_signal_state.update({
-                "road_A": "GREEN",
-                "road_B": "RED",
-                "timer": MAX_TIME,
-                "count_A": A,
-                "count_B": B,
-                "emergency": True,
-                "pedestrian": False
-            })
-        else:
-            dual_signal_state.update({
-                "road_A": "RED",
-                "road_B": "GREEN",
-                "timer": MAX_TIME,
-                "count_A": A,
-                "count_B": B,
-                "emergency": True,
-                "pedestrian": False
-            })
+        print("🚑 Emergency override active")   # debug
+        
+        dual_signal_state.update({
+            "road_A": "GREEN",
+            "road_B": "GREEN",  
+            "timer": 60,
+            "count_A": A,
+            "count_B": B,
+            "emergency": True,
+            "pedestrian": False
+        })
 
         return dual_signal_state
 
